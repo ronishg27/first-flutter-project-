@@ -1,6 +1,6 @@
-# sample_project
+# flutter-authentication-system
 
-A new Flutter project.
+in progress
 
 ## Getting Started
 
