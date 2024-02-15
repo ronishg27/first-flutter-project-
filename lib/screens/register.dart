@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:sample_project/services/firebase_auth.service.dart';
 
 class Register extends StatelessWidget {
   Register({super.key});
@@ -128,15 +129,21 @@ class Register extends StatelessWidget {
                   onPressed: () {
                     if (_formKey.currentState != null) {
                       if (_formKey.currentState!.validate()) {
-                        print(
-                            'The Enter First Name ${_fullNameController.text}');
-                        print(
-                            'The email address is  ${_emailAddressController.text}');
-                        print(
-                            'The Enter phone number ${_phoneNumberController.text}');
-                        print('The password is ${_passwordController.text}');
-                        print(
-                            'The street address ${_streetAddressController.text}');
+                        final firebaseAuthService = FirebaseAuthService();
+                        final user =
+                            firebaseAuthService.signupWithEmailAndPassword(
+                                _emailAddressController.text,
+                                _passwordController.text);
+                        print(user);
+                        // print(
+                        //     'The Enter First Name ${_fullNameController.text}');
+                        // print(
+                        //     'The email address is  ${_emailAddressController.text}');
+                        // print(
+                        //     'The Enter phone number ${_phoneNumberController.text}');
+                        // print('The password is ${_passwordController.text}');
+                        // print(
+                        //     'The street address ${_streetAddressController.text}');
                       }
                     }
                   },

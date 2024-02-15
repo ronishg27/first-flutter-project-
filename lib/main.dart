@@ -1,11 +1,23 @@
 // ignore_for_file: prefer_const_constructors
-
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sample_project/screens/login.dart';
+import 'package:sample_project/screens/profile.dart';
 import 'package:sample_project/screens/register.dart';
+import 'package:sample_project/utils/default_firebase.config.dart';
 
-void main() {
-  runApp(MaterialApp(
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeFirebase();
+  runApp(myApp());
+}
+
+Future<void> initializeFirebase() async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.web);
+}
+
+MaterialApp myApp() {
+  return MaterialApp(
     title: 'Flutter App!!',
     theme: ThemeData(
       colorSchemeSeed: Colors.indigo,
@@ -21,11 +33,11 @@ void main() {
       '/': (context) => MyApp(),
       '/register': (context) => Register(),
       '/login': (context) => LoginScreen(),
-      // '/home': (context) => Homescreen()
+      '/profile': (context) => ProfilePage()
     },
     initialRoute: '/',
     debugShowCheckedModeBanner: false,
-  ));
+  );
 }
 
 class MyApp extends StatelessWidget {
