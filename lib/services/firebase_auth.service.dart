@@ -38,4 +38,13 @@ class FirebaseAuthService {
     }
     return null;
   }
+
+  void signOutUser() async {
+    try {
+      await _auth.signOut();
+      print("User signed out successfully");
+    } catch (e) {
+      print("Error signing out user:: " + e.toString());
+    }
+  }
 }

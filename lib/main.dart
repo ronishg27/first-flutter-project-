@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:sample_project/screens/auth_page.dart';
 import 'package:sample_project/screens/login.dart';
 import 'package:sample_project/screens/profile.dart';
 import 'package:sample_project/screens/register.dart';
@@ -20,22 +21,20 @@ MaterialApp myApp() {
   return MaterialApp(
     title: 'Flutter App!!',
     theme: ThemeData(
-      colorSchemeSeed: Colors.indigo,
-      useMaterial3: false,
+      colorSchemeSeed: Colors.cyanAccent,
+      useMaterial3: true,
       brightness: Brightness.light,
+      fontFamily: 'Poppins',
+      appBarTheme: AppBarTheme(color: Color.fromARGB(255, 150, 239, 239)),
     ),
-    // darkTheme: ThemeData(
-    //   colorSchemeSeed: Colors.blue,
-    //   useMaterial3: true,
-    //   brightness: Brightness.dark,
-    // ),
     routes: {
       '/': (context) => MyApp(),
+      '/auth': (context) => AuthPage(),
       '/register': (context) => Register(),
       '/login': (context) => LoginScreen(),
       '/profile': (context) => ProfilePage()
     },
-    initialRoute: '/',
+    initialRoute: '/auth',
     debugShowCheckedModeBanner: false,
   );
 }
@@ -48,7 +47,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // backgroundColor: Colors.amber,
         title: Text('CSIT3rd'),
         centerTitle: true,
       ),
