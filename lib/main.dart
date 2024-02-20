@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:sample_project/screens/auth_page.dart';
 import 'package:sample_project/screens/login.dart';
 import 'package:sample_project/screens/profile.dart';
 import 'package:sample_project/screens/register.dart';
@@ -29,12 +28,11 @@ MaterialApp myApp() {
     ),
     routes: {
       '/': (context) => MyApp(),
-      '/auth': (context) => AuthPage(),
       '/register': (context) => Register(),
       '/login': (context) => LoginScreen(),
-      '/profile': (context) => ProfilePage()
+      '/profile': (context) => ProfilePage(),
     },
-    initialRoute: '/auth',
+    initialRoute: '/register',
     debugShowCheckedModeBanner: false,
   );
 }

@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:sample_project/services/firebase_auth.service.dart';
+import 'package:sample_project/services/user_details.service.dart';
+import 'package:toast/toast.dart';
 
 class Register extends StatelessWidget {
   Register({super.key});
@@ -9,14 +11,15 @@ class Register extends StatelessWidget {
   final _formKey = GlobalKey<FormState>(); //underscore : private
   final _fullNameController = TextEditingController();
   final _emailAddressController = TextEditingController();
-  // final _phoneNumberController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
   final _passwordController = TextEditingController();
-  // final _streetAddressController = TextEditingController();
+  final _streetAddressController = TextEditingController();
   final _emailRegexPattern =
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
 
   @override
   Widget build(BuildContext context) {
+    ToastContext().init(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Sign up form'),
@@ -79,23 +82,23 @@ class Register extends StatelessWidget {
                       },
                     ),
 
-                    // TextFormField(
-                    //   controller: _phoneNumberController,
-                    //   keyboardType: TextInputType.phone,
-                    //   maxLength: 10,
-                    //   decoration: InputDecoration(
-                    //     prefixIcon: Icon(Icons.phone),
-                    //     border: OutlineInputBorder(),
-                    //     labelText: 'Enter your phone number',
-                    //   ),
-                    //   validator: (phoneNumberValue) {
-                    //     if (phoneNumberValue == null ||
-                    //         phoneNumberValue.trim().isEmpty) {
-                    //       return 'Please enter your phone number';
-                    //     }
-                    //     return null;
-                    //   },
-                    // ),
+                    TextFormField(
+                      controller: _phoneNumberController,
+                      keyboardType: TextInputType.phone,
+                      maxLength: 10,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.phone),
+                        border: OutlineInputBorder(),
+                        labelText: 'Enter your phone number',
+                      ),
+                      validator: (phoneNumberValue) {
+                        if (phoneNumberValue == null ||
+                            phoneNumberValue.trim().isEmpty) {
+                          return 'Please enter your phone number';
+                        }
+                        return null;
+                      },
+                    ),
 
                     TextFormField(
                       controller: _passwordController,
@@ -116,23 +119,23 @@ class Register extends StatelessWidget {
                       },
                     ),
 
-                    // TextFormField(
-                    //   controller: _streetAddressController,
-                    //   keyboardType: TextInputType.streetAddress,
-                    //   maxLength: 20,
-                    //   maxLines: 4, //lines or height of box
-                    //   decoration: InputDecoration(
-                    //     border: OutlineInputBorder(),
-                    //     labelText: 'Enter your address',
-                    //   ),
-                    //   validator: (streetAddressValue) {
-                    //     if (streetAddressValue == null ||
-                    //         streetAddressValue.trim().isEmpty) {
-                    //       return 'Please Enter address';
-                    //     }
-                    //     return null;
-                    //   },
-                    // ),
+                    TextFormField(
+                      controller: _streetAddressController,
+                      keyboardType: TextInputType.streetAddress,
+                      maxLength: 20,
+                      maxLines: 4, //lines or height of box
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Enter your address',
+                      ),
+                      validator: (streetAddressValue) {
+                        if (streetAddressValue == null ||
+                            streetAddressValue.trim().isEmpty) {
+                          return 'Please Enter address';
+                        }
+                        return null;
+                      },
+                    ),
                     // SizedBox(height: 10),
                     // ListTile(
                     //   title: Text('This is title.'),
@@ -142,16 +145,30 @@ class Register extends StatelessWidget {
                     // ),
                     SizedBox(height: 10),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState != null) {
                           if (_formKey.currentState!.validate()) {
                             final firebaseAuthService = FirebaseAuthService();
-                            final user =
-                                firebaseAuthService.signupWithEmailAndPassword(
+                            final db = FirebaseStoreService();
+                            final user = await firebaseAuthService
+                                .signupWithEmailAndPassword(
                                     _emailAddressController.text,
                                     _passwordController.text);
-                            print(user);
-                            Navigator.pushReplacementNamed(context, '/login');
+                            if (user != null) {
+                              print("user created successfully: $user");
+                              final res = await db.addDetails(
+                                _fullNameController.text,
+                                _emailAddressController.text,
+                                _phoneNumberController.text,
+                                _streetAddressController.text,
+                              );
+                              print(res);
+                              Navigator.pushReplacementNamed(context, '/login');
+                            } else {
+                              Toast.show(
+                                  "Something went wrong while registering.",
+                                  duration: 3);
+                            }
                           }
                         }
                       },
